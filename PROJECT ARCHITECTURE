@@ -1,0 +1,200 @@
+Text
+The project architecture defines the overall structure of the application and explains how different components communicate with each other. The system is divided into three major layers: the frontend, backend, and database. The frontend handles user interaction, the backend manages business logic and API requests, and the database stores application data.
+
+Coding
+Project/
+│
+├── frontend/
+│   ├── index.html
+│   ├── css/
+│   └── js/
+│
+├── backend/
+│   ├── server.js
+│   ├── routes/
+│   ├── controllers/
+│   └── models/
+│
+├── database/
+│   └── database.sql
+│
+└── README.md
+
+Basic architecture:
+User
+  ↓
+Frontend
+  ↓
+Backend / API
+  ↓
+Business Logic
+  ↓
+Database
+
+2. PROJECT SETUP AND CONFIGURATION
+Text
+The project setup phase involves creating the development environment and installing the required software packages and dependencies. Configuration files are created to manage application settings, database connections, and environment variables.
+Coding
+Initialize the project:
+
+mkdir my-project
+cd my-project
+npm init -y
+npm install express mysql2 dotenv cors
+
+Create server.js:
+
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("Project API is running");
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+.env configuration:
+
+PORT=5000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=my_project
+
+3. BACKEND DEVELOPMENT
+Text
+Backend development focuses on implementing the server-side functionality of the application. It handles client requests, performs business operations, communicates with the database, and returns appropriate responses through APIs.
+
+Coding
+API route example:
+
+const express = require("express");
+const router = express.Router();
+
+router.get("/users", (req, res) => {
+    res.json({
+        message: "Users retrieved successfully"
+    });
+});
+
+router.post("/users", (req, res) => {
+    const { name, email } = req.body;
+
+    res.json({
+        message: "User created successfully",
+        user: {
+            name,
+            email
+        }
+    });
+});
+
+module.exports = router;
+
+Connect the route in server.js:
+
+const userRoutes = require("./routes/users");
+
+app.use("/api", userRoutes);
+
+The APIs can then be accessed using:
+
+GET  /api/users
+POST /api/users
+
+4. DATABASE DEVELOPMENT
+Text
+Database development involves designing and implementing the database required to store and manage application information. Tables, fields, primary keys, foreign keys, and relationships are created according to the project requirements.
+
+Coding
+Create database:
+
+CREATE DATABASE my_project;
+
+USE my_project;
+
+Create users table:
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+Insert data:
+
+INSERT INTO users (name, email, password)
+VALUES ('John Doe', 'john@example.com', 'password123');
+
+Retrieve data:
+
+SELECT * FROM users;
+
+Update data:
+
+UPDATE users
+SET name = 'John Smith'
+WHERE id = 1;
+
+Delete data:
+
+DELETE FROM users
+WHERE id = 1;
+
+5. PROJECT EXECUTION
+Text
+Project execution is the final phase in which all developed components are integrated and tested as a complete application. The frontend communicates with the backend through APIs, while the backend communicates with the database. Functional testing, debugging, performance testing, and deployment are performed before the system is released.
+
+Coding
+Start the backend:
+
+node server.js
+
+Expected output:
+
+Server running on port 5000
+
+Example frontend API call:
+
+fetch("http://localhost:5000/api/users")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+Complete execution flow:
+
+          USER
+            ↓
+       FRONTEND UI
+            ↓
+       HTTP REQUEST
+            ↓
+      BACKEND / API
+            ↓
+     BUSINESS LOGIC
+            ↓
+        DATABASE
+            ↓
+       DATA RESPONSE
+            ↓
+       BACKEND / API
+            ↓
+       FRONTEND UI
+            ↓
+          USER
